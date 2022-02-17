@@ -1,15 +1,19 @@
 package com.example.OrderServer;
 
+import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.annotation.EnableJms;
 import org.springframework.web.client.RestTemplate;
+
+import javax.jms.Queue;
 
 @SpringBootApplication
 @EnableEurekaClient
+@EnableJms
 public class OrderServerApplication {
 
 	public static void main(String[] args) {
@@ -27,3 +31,13 @@ class RestTemplateConfig {
 		return new RestTemplate();
 	}
 }
+
+@Configuration
+@EnableJms
+class JmsConfiguration {
+	@Bean
+	public Queue queue(){
+		return new ActiveMQQueue("email-event");
+	}
+}
+
